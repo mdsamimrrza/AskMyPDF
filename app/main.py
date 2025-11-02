@@ -1,4 +1,4 @@
-from fastapi import FastAPI, UploadFile, Form
+from fastapi import FastAPI, UploadFile, Form, File
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from pathlib import Path
@@ -34,7 +34,7 @@ pdf_text = ""
 
 
 @app.post("/upload_pdf")
-async def upload_pdf(file: UploadFile):
+async def upload_pdf(file: UploadFile = File(...)):
     global pdf_text
     file_path = UPLOAD_FOLDER / file.filename
     with open(file_path, "wb") as f:
