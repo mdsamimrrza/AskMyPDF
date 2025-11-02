@@ -2,7 +2,22 @@ services:
   - type: web
     name: askmypdf
     env: python
-    buildCommand: pip install -r requirements.txt
-    startCommand: uvicorn app.main:app --host 0.0.0.0 --port 10000
+    # Install the backend requirements (working directory is backend)
+    buildCommand: python -m pip install --upgrade pip; python -m pip install -r requirements.txt
+    # Start the app by importing the backend package directly
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
     region: singapore
     plan: starter
+    envVars:
+      - key: QA_MODEL
+        value: google/flan-t5-small
+      - key: QA_STRATEGY
+        value: extractive
+      - key: OMP_NUM_THREADS
+        value: "1"
+      - key: MKL_NUM_THREADS
+        value: "1"
+      - key: OPENBLAS_NUM_THREADS
+        value: "1"
+      - key: TOKENIZERS_PARALLELISM
+        value: "false"
